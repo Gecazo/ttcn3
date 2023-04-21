@@ -1,0 +1,38 @@
+modulepar {
+  display system "console";
+}
+
+module game {
+
+  type integer Guess;
+
+  function integer generateRandomNumber() {
+    return random(100) + 1;
+  }
+
+  function integer playGame(integer randomNumber) runs on main {
+    var integer attempts := 0;
+    var Guess guess := 0;
+    
+    while (guess != randomNumber) {
+      message("Enter your guess: ");
+      getverdict(Guess);
+      if (guess < randomNumber) {
+        message("Your guess is too low.\n");
+      } else if (guess > randomNumber) {
+        message("Your guess is too high.\n");
+      }
+      attempts := attempts + 1;
+    }
+
+    message("Congratulations! You guessed the number in ", attempts, " attempts.");
+    return attempts;
+  }
+
+  testcase guessTheNumber() runs on testexecution {
+    var integer randomNumber := generateRandomNumber();
+    var integer attempts := playGame(randomNumber);
+    setverdict(pass, "Number of attempts: " & attempts);
+  }
+
+}
